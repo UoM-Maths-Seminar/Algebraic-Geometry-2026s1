@@ -1,0 +1,100 @@
+\documentclass[12pt, a4paper]{article}
+
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{amsmath, amssymb, amsfonts}
+\usepackage{amsthm}
+\usepackage{mathtools}
+\usepackage{tikz}
+\usepackage{hyperref}
+\usepackage{geometry}
+\usepackage{enumitem}
+\usepackage{fancyhdr}
+
+\geometry{margin=1in}
+\setlength{\headheight}{14.5pt}
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{Algebraic Geometry}
+\fancyhead[R]{UniMelb 2026 S1}
+\fancyfoot[C]{\thepage}
+
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{corollary}[theorem]{Corollary}
+\theoremstyle{definition}
+\newtheorem{definition}{Definition}
+\newtheorem{example}{Example}
+\newtheorem{remark}{Remark}
+\newtheorem{exercise}{Exercise}
+
+\DeclareMathOperator{\Spec}{Spec}
+\DeclareMathOperator{\GL}{GL}
+\DeclareMathOperator{\Hom}{Hom}
+\DeclareMathOperator{\coker}{coker}
+
+\title{\textbf{Algebraic Geometry Notes}\\[0.3em]
+\large Ch.11: Quasiprojective Varieties (week 11)}
+\author{Your Name}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+
+\tableofcontents
+\newpage
+
+\section{Introduction}
+
+\subsection{Overview}
+These notes cover material from the Algebraic Geometry course at University of Melbourne.
+
+\subsection{Prerequisites}
+\begin{itemize}
+    \item Linear Algebra
+    \item Abstract Algebra (Groups, Rings, Fields)
+    \item Basic Topology
+\end{itemize}
+
+\section{Basic Definitions}
+
+\begin{definition}[Affine Variety]
+    An affine variety is the set of common zeros of a collection of polynomials in $\mathbb{A}^n$.
+\end{definition}
+
+\begin{example}
+    The unit circle in $\mathbb{A}^2$ is given by $V(x^2 + y^2 - 1)$.
+\end{example}
+
+\section{Theorems and Proofs}
+
+\begin{theorem}[Nullstellensatz]
+    Let $I \subset k[x_1, \ldots, x_n]$ be an ideal. Then $I(V(I)) = \sqrt{I}$.
+\end{theorem}
+
+\begin{proof}
+    The proof follows from the correspondence between ideals and algebraic sets.
+\end{proof}
+
+\section{Examples}
+
+\begin{example}
+    Example illustrating the concept with detailed explanation.
+\end{example}
+
+\section{Exercises}
+
+\begin{exercise}
+    Exercise statement here.
+\end{exercise}
+
+\section{References}
+
+\begin{itemize}
+    \item Hartshorne, R. \textit{Algebraic Geometry}
+    \item Shafarevich, I.R. \textit{Basic Algebraic Geometry}
+\end{itemize}
+
+\end{document}
