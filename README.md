@@ -2,6 +2,8 @@
 
 Repository for sharing and working with algebraic geometry notes at University of Melbourne (Semester 1, 2026).
 
+[Beginning in Algebraic Geometry by Emily Clader and Dustin Ross](https://link.springer.com/book/10.1007/978-3-031-88819-9) is the textbook to use.
+
 ## Templates
 
 This repository includes LaTeX templates for creating notes and presentations:
