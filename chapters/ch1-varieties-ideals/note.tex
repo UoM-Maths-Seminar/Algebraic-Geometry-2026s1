@@ -36,7 +36,7 @@
 
 \title{\textbf{Algebraic Geometry Notes}\\[0.3em]
 \large Ch.1: Varieties and Ideals (week 1)}
-\author{Your Name}
+\author{Geethan Pfeifer}
 \date{\today}
 
 \begin{document}
@@ -46,55 +46,107 @@
 \tableofcontents
 \newpage
 
+%\section{Introduction}
+
+%{Overview}
+%These notes cover material from the Algebraic Geometry course at University of Melbourne.
 \section{Introduction}
+This is a slightly reordered, slightly condensed version of the first chapter from \href{https://drive.google.com/file/d/1cJFa9-rGcWDeoQM7paC0mXDbJvZycG4O/view}{Beginning in Algebraic Geometry} by Emily Clader and Dustin Ross. I have excluded examples, proofs, and detailed elaboration; please attend the seminar or read the textbook for these.
 
-\subsection{Overview}
-These notes cover material from the Algebraic Geometry course at University of Melbourne.
-
-\subsection{Prerequisites}
+\section{Prerequisites}
+You should have a rough working idea of the following:
 \begin{itemize}
-    \item Linear Algebra
-    \item Abstract Algebra (Groups, Rings, Fields)
-    \item Basic Topology
+    \item Basic set theory, basic propositional logic, polynomials, functions
+    \item Groups, Rings, Fields
+    \item Algebraically closed fields
+    \item The ring of polynomials, ideals
+    \item Basic cartesian geometry
 \end{itemize}
 
-\section{Basic Definitions}
+\section{Affine Varieties and Vanishing Ideals}
+\begin{definition}[Affine Space]
+	Given a field $K$, the $n$-dimensional affine space over $K$, denoted $\mathbb{A}^n_K$ is the set of $n$-tuples of $K$.
+\end{definition}
+Note that the $n$-dimensional vector space over $K$, denoted $K^n$ is \textit{also} the set of $n$-tuples of $K$.  However, for $\mathbb{A}^n_K$ we are not concerned about the vector space structure of $K^n$, rather we treat elements of $\mathbb{A}^n_K$ as inputs to polynomials in $K[x_1, \dots, x_n]$.
 
-\begin{definition}[Affine Variety]
-    An affine variety is the set of common zeros of a collection of polynomials in $\mathbb{A}^n$.
+\begin{definition}[Polynomial Functions]
+	A polynomial $f \in K[x_1, \dots, x_n]$ gives rise to a polynomial function $f : \mathbb{A}_K^n \rightarrow K$, which evaluates the polynomial $f$ for each element in $\mathbb{A}^n_K$. We denote the set of polynomial functions as $K[\mathbb{A}^n]$.
+\end{definition}
+The map that takes polynomials to polynomial functions is a (ring) isomorphism if and only if $K$ is a infinite field.\footnote{It is also important that $K$ is a field. There are infinite rings that fail to satisfy this property, but we are only concerned about fields here.} Refer to the textbook for a proof.
+
+\begin{definition}[Vanishing Set]
+	Given $f \in K[x_1, \dots, x_n]$, we say that $f$ vanishes at $(a_1, \dots, a_n) \in \mathbb{A}^n_K$ if $f$ evaluated at $(a_1, \dots, a_n)$ is $0$. Given a set of polynomials $S \subseteq K[x_1, \dots, x_n]$, the vanishing set of $S$, denoted $\mathcal{V}(S)$, is the set of points in $\mathbb{A}^n_K$ at which \textit{every} polynomial in $S$ vanishes. That is,
+	$$\mathcal{V}(S) = \left\{(a_1, \dots, a_n) \in \mathbb{A}^n_K : \forall f \in S, f(a_1, \dots, a_n) = 0\right\}$$
 \end{definition}
 
-\begin{example}
-    The unit circle in $\mathbb{A}^2$ is given by $V(x^2 + y^2 - 1)$.
-\end{example}
 
-\section{Theorems and Proofs}
+
+\begin{definition}[Affine Variety]
+	A subset $X \subseteq \mathbb{A}^n_K$ is an affine variety if there exists some subset of polynomials $\mathcal S \subseteq K[x_1, \dots, x_n]$ such that $X = \mathcal{V}(S)$.
+\end{definition}
+Note that for an affine variety $X$ it may not be possible to choose $S$ with only one member.
+
+\begin{proposition}[Affine Varieties are defined by Ideals]
+	For all $S \subseteq K[x_1, \dots, x_n]$, $\mathcal{V}(S) = \mathcal{V}(\langle S \rangle)$.
+\end{proposition}
+Note that $\langle S \rangle$ is an ideal in the ring $K[x_1, \dots, x_n]$. Refer to the textbook for a proof.
+
+\begin{definition}[Vanishing ideal]
+	Let $X \subseteq \mathbb{A}^n_K$. The vanishing ideal of $X$ is defined by:
+	$$\mathcal{I}(X) = \{f \in K[x_1, \dots, x_n] : \forall (a_1, \dots, a_n) \in X, f(a_1, \dots, a_n) = 0\}$$
+\end{definition}
+Note that if $f \in \mathcal{I}(X)$, $(a_1, \dots, a_n) \notin X$ does not imply that $f(a_1, \dots, a_n) \neq 0$. As one might guess from its name, $\mathcal{I}(X)$ is an ideal of $K[x_1, \dots, x_n]$.
+
+
+\begin{proposition}[Composing $\mathcal{V}$ and $\mathcal{I}$ operators]
+	Let $X$ be an affine variety and $S$ a vanishing ideal. Then $\mathcal{V}(\mathcal{I}(X)) = X$ and $\mathcal{I}(\mathcal{V}(S)) = S$.
+\end{proposition}
+\paragraph{} A slightly generalised version of this proposition is given in the textbook (proposition 1.21).
+\paragraph{} We've established a bijection $\mathcal{V}$ between the set of vanishing ideals in $K[x_1, \dots, x_n]$ and the set of affine varieties in in $\mathbb{A}^n_K$ with inverse $\mathcal{I}$.
+
+\begin{definition}[Radical Ideals]
+	Let $R$ be a ring, and $I$ an ideal of $R$. $I$ is radical, if it satisfies the following property:
+	$$
+	\forall a \in R, \forall m \in \mathbb{N}, a^m \in I \implies a \in I
+	$$
+\end{definition}
+In essence this means that radical ideals are closed under radicals (i.e. $n$\textsuperscript{th} roots) that are members of the underlying ring, for all natural $n$.
+
+\begin{definition}[Radical of an ideal]
+Let $R$ be a ring, and $I$ an ideal of $R$. Define the radical of $I$ as:
+$$
+\sqrt I = \left\{
+a \in R : \exists m \in \mathbb{N}, a^m \in I
+\right\}
+$$
+\end{definition}
+The radical of an ideal is radical, and an ideal $I$ is radical if and only if $I = \sqrt I$.
+\begin{proposition}[Vanishing ideals are radical]
+	For any set $X \subseteq \mathbb{A}^n_K$, $\mathcal I (X)$ is radical.
+\end{proposition}
+\begin{proposition}[Radicals of principal ideals]
+	Let $R$ be a UFD, $q \in R$. Suppose the distinct irreducible factors of $q$ in $R$ are $q_1, \dots, q_n$. Then, $$
+	\sqrt{\langle q \rangle} = \langle q_1 \dots q_n \rangle
+	$$
+\end{proposition}
+\paragraph{}Note that we are taking the ideal generated by the product of $q_1, \dots, q_n$, not the ideal $\langle q_1, \dots, q_n\rangle$.
+\paragraph{}This is equivalent to saying that $\langle q \rangle$ is radical iff $q$ is square-free (wrt. the elements of $R$.)
+
+\begin{proposition}[Prime and maximal ideals are radical]
+	Every prime ideal is a radical ideal.
+\end{proposition}
 
 \begin{theorem}[Nullstellensatz]
-    Let $I \subset k[x_1, \ldots, x_n]$ be an ideal. Then $I(V(I)) = \sqrt{I}$.
+   Let $K$ be an algebraically closed field. Let $I \subseteq K[x_1, \ldots, x_n]$ be an ideal. Then $\mathcal I(\mathcal V(I)) = \sqrt{I}$.
 \end{theorem}
+\begin{corollary}[Bijection between radical ideals and affine varieties]
+	If $K$ is an algebraically closed field, then $\mathcal V$ restricted to radical ideals of $K[x_1, \dots x_n]$ is a bijection with the affine varieties of $\mathbb{A}_K^n$ with inverse $\mathcal I$.
+\end{corollary}
 
-\begin{proof}
-    The proof follows from the correspondence between ideals and algebraic sets.
-\end{proof}
+%\section{References}
 
-\section{Examples}
-
-\begin{example}
-    Example illustrating the concept with detailed explanation.
-\end{example}
-
-\section{Exercises}
-
-\begin{exercise}
-    Exercise statement here.
-\end{exercise}
-
-\section{References}
-
-\begin{itemize}
-    \item Hartshorne, R. \textit{Algebraic Geometry}
-    \item Shafarevich, I.R. \textit{Basic Algebraic Geometry}
-\end{itemize}
+%\begin{itemize}
+ %   \item Hartshorne, R. \textit{Algebraic Geometry}
+%\end{itemize}
 
 \end{document}
