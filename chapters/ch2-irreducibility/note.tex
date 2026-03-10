@@ -28,6 +28,16 @@
 \newtheorem{example}{Example}
 \newtheorem{remark}{Remark}
 \newtheorem{exercise}{Exercise}
+\usepackage{float}  
+\newtcolorbox{mybox}[1]{% #1 = title
+  enhanced, breakable,
+  colback=blue!5!white, colframe=blue!75!black, fonttitle=\bfseries,
+  title={#1},
+  boxsep=0.4ex, left=0.6ex, right=0.6ex, top=0.6ex, bottom=0.6ex,
+  before skip=0.6em, after skip=0.6em
+}
+\usepackage{slashed}
+
 
 \DeclareMathOperator{\Spec}{Spec}
 \DeclareMathOperator{\GL}{GL}
@@ -96,5 +106,74 @@ These notes cover material from the Algebraic Geometry course at University of M
     \item Hartshorne, R. \textit{Algebraic Geometry}
     \item Shafarevich, I.R. \textit{Basic Algebraic Geometry}
 \end{itemize}
+
+\section{Zariski Topology}
+
+Spatially speaking, a topology is what remains after suspending the metric, the affine , and the differential structure. Well, it seems not much is left for us. 
+
+My claim is 
+$$
+\textbf{Topology is about the reasoning with  finite precision}
+$$
+The rationality of this statement is revealed through an everyday example:\\
+
+Let' say you are trying to measure my height
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.5\linewidth]{Screenshot 2026-02-27 at 11.04.16.png}
+
+\end{figure}
+We take the $y-axis$ as a copy of $\mathbb{R}$ equipped with standard topological basis 
+$$
+\mathcal{B=\{}(a,b): a_i<b_i\}
+$$
+Given this, we define a set $U\subseteq \mathbb{R}$ to be open, if for any $x\in U$, there exists $B\in \mathcal{B}$ s.t. 
+$$
+x\in B\subseteq U
+$$
+Let's say the each open set $U$ corresponds to a ruler $R_U$ s.t. if the measured length lies in $U$, the ruler can tell you it does.\\ 
+
+Let's consider the proposition that "my height is greater than $1.8$ meters". Or, formally, 
+$$
+P: h\in (1.8,\infty)
+$$
+Given that my height is indeed strictly larger than $1.8$m,  you can decide  the proposition by eventually finding a ruler s.t. 
+\[
+(h-\delta,\ h+\delta)\subseteq(1.8,\infty).
+\]
+This ruler will indicates that $h\in (1.8,\infty)$, which means $P$ is true. 
+
+If, however, $P$ is actually false and my height is exactly $1.8$m, then you cannot, in finite time, decide the proposition with the rulers provided by the Topology, simply because,  for any $\epsilon>0$
+$$
+(1.8-\epsilon,1.8+\epsilon)\not\subseteq\{1.8\}
+$$
+Each ruler will only tell you a rough range around $1.8$, but a decision requires infinite precision:
+$$
+\cap_{n=1}^\infty (1.8-\frac{1}{n},1.8+\frac{1}{n})=\{1.8\}
+$$
+This example suggests that we understand open sets as\textbf{ } \textbf{axiomatizing the notion of a condition whose truth can be verified with only finite precision(but whose falsehood cannot necessarily be verified this way).} \\
+
+\begin{mybox}{An example}
+It is intuitively possible to verify whether a point in a metric space lies in an open ball with finite precision by showing that it lies in an even smaller open ball, but it is not necessarily possible to do the same for a closed ball because the point may lie on the boundary and we cannot make arbitrarily precise measurements.
+\end{mybox}
+
+ Topology (just like Manifold) is not limited to be spatial, because the notion of "finite precision" can be interpreted non-spatially. It can, for example, be understood as "partial information" 
+
+\begin{enumerate}
+    \item a physical system = manifold $M$
+    \item state of the system(information)= point of $M$, $x\in M$
+\end{enumerate}
+
+open sets of $M$=Information $C$ on the system that verifying if state satisfies $C $ only requires partial information. \\
+
+To be written:
+
+Zariski topology motivation:
+It is always possible to verify with finite precision  whether a polynomial is nonzero at a point by computing with sufficient precision(just go up to non-zero decimal), but without additional information it is not necessarily possible to verify in finite precision whether a polynomial is zero at a point(we need to verify infinite many decimals are 0).
+
+do the usual topological computations for zariski topology, and show it is non-metrizable generally 
+
+
+
 
 \end{document}

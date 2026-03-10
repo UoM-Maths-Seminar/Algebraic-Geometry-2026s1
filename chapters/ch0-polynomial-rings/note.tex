@@ -1,100 +1,289 @@
-\documentclass[12pt, a4paper]{article}
+\documentclass[11pt]{article}
 
-\usepackage[utf8]{inputenc}
-\usepackage[T1]{fontenc}
-\usepackage{amsmath, amssymb, amsfonts}
-\usepackage{amsthm}
-\usepackage{mathtools}
-\usepackage{tikz}
-\usepackage{hyperref}
-\usepackage{geometry}
-\usepackage{enumitem}
-\usepackage{fancyhdr}
+% --- compact global formatting (no content changes) ---
+\usepackage[margin=1in]{geometry}
+\usepackage{microtype}
+\usepackage{mathtools,amssymb}
+\usepackage{tikz-cd}
+\usepackage[most]{tcolorbox}
+\tcbuselibrary{theorems}
 
-\geometry{margin=1in}
-\setlength{\headheight}{14.5pt}
-\pagestyle{fancy}
-\fancyhf{}
-\fancyhead[L]{Algebraic Geometry}
-\fancyhead[R]{UniMelb 2026 S1}
-\fancyfoot[C]{\thepage}
+% tighter display-math spacing
+\setlength{\abovedisplayskip}{0.6em}
+\setlength{\belowdisplayskip}{0.6em}
+\setlength{\abovedisplayshortskip}{0.4em}
+\setlength{\belowdisplayshortskip}{0.4em}
 
-\newtheorem{theorem}{Theorem}
-\newtheorem{lemma}[theorem]{Lemma}
-\newtheorem{proposition}[theorem]{Proposition}
-\newtheorem{corollary}[theorem]{Corollary}
-\theoremstyle{definition}
-\newtheorem{definition}{Definition}
-\newtheorem{example}{Example}
-\newtheorem{remark}{Remark}
-\newtheorem{exercise}{Exercise}
+% slightly tighter line spacing; keep readable
+\linespread{0.98}
+\raggedbottom
 
-\DeclareMathOperator{\Spec}{Spec}
-\DeclareMathOperator{\GL}{GL}
-\DeclareMathOperator{\Hom}{Hom}
-\DeclareMathOperator{\coker}{coker}
 
-\title{\textbf{Algebraic Geometry Notes}\\[0.3em]
-\large Ch.0: Polynomial Rings (Prereading)}
-\author{Your Name}
-\date{\today}
+ % compact theorem, proposition, corrolary and definition boxes
+\newtcbtheorem[number within=section]{theorem}{Theorem}%
+{enhanced, breakable,
+ colback=blue!5!white, colframe=blue!75!black, fonttitle=\bfseries,
+ boxsep=0.4ex, left=0.6ex, right=0.6ex, top=0.6ex, bottom=0.6ex,
+ before skip=0.6em, after skip=0.6em}{th}
+\newtcbtheorem[use counter from=theorem]{proposition}{Proposition}%
+{enhanced, breakable,
+ colback=blue!5!white, colframe=blue!75!black, fonttitle=\bfseries,
+ boxsep=0.4ex, left=0.6ex, right=0.6ex, top=0.6ex, bottom=0.6ex,
+ before skip=0.6em, after skip=0.6em}{prop}
+\newtcbtheorem[use counter from=theorem]{lemma}{Lemma}%
+{enhanced, breakable,
+ colback=blue!5!white, colframe=blue!75!black, fonttitle=\bfseries,
+ boxsep=0.4ex, left=0.6ex, right=0.6ex, top=0.6ex, bottom=0.6ex,
+ before skip=0.6em, after skip=0.6em}{prop}
+\newtcbtheorem[use counter from=theorem]{corollary}{Corollary}%
+{enhanced, breakable,
+ colback=blue!5!white, colframe=blue!75!black, fonttitle=\bfseries,
+ boxsep=0.4ex, left=0.6ex, right=0.6ex, top=0.6ex, bottom=0.6ex,
+ before skip=0.6em, after skip=0.6em}{cor}
 
+\newtcbtheorem[use counter from=theorem]{definition}{Definition}%
+{enhanced, breakable,
+ colback=blue!5!white, colframe=blue!75!black, fonttitle=\bfseries,
+ boxsep=0.4ex, left=0.6ex, right=0.6ex, top=0.6ex, bottom=0.6ex,
+ before skip=0.6em, after skip=0.6em}{def}
+\newtcolorbox{mybox}[1]{% #1 = title
+  enhanced, breakable,
+  colback=blue!5!white, colframe=blue!75!black, fonttitle=\bfseries,
+  title={#1},
+  boxsep=0.4ex, left=0.6ex, right=0.6ex, top=0.6ex, bottom=0.6ex,
+  before skip=0.6em, after skip=0.6em
+}
+\usepackage{slashed}
+
+\usepackage{float}  
 \begin{document}
 
-\maketitle
+\section{Basic Ring Theory}
 
-\tableofcontents
-\newpage
+While being the purest commutative ring(free), the polynomial ring is also important for geometry. Let's say we center $S^1$ at a cartesian frame. That means we can describe it $\textbf{algebraically}$ by 
+$$
+x^2+y^2-1=0
+$$
+This expression, of course, is not unique, simply because 
+$$
+2x^2+2y^2-2=0
+$$
+and
+$$
+(x^2+y^2-1)^2=0
+$$
+also describes it. But since all of the expressions describing the circle is considered important, we need to study \textbf{a set of polynomials}, which will be our central subject matter for this section.\\
 
-\section{Introduction}
+The constituting elements  of polynomials are monomials of the form:
+$$
+x^\alpha=x_1^{\alpha_1}...x_n^{\alpha_n}
+$$
+where $\alpha=(\alpha_1,...,\alpha_n)\in \mathbb{N}^n$, which determines the monomial uniquely. Consequently, a polynomial is of the form:
+$$
+f=\sum_{\alpha\in \mathbb{N}^n}a_\alpha x^\alpha 
+$$
+where $a_\alpha=0$ for all but finitely many $\alpha$. A polynomial is uniquely determined by its coefficient $a_\alpha$. \\
 
-\subsection{Overview}
-These notes cover material from the Algebraic Geometry course at University of Melbourne.
+Next, the usual addition and cauchy product of polynomials turn the set of polynomials into a ring. 
+\begin{mybox}{warning}
+Note that a polynomial is different from a polynomial function. Consider the finite ring $\mathbb{Z}/2\mathbb{Z}$    and the polynomials 
+$$
+x \ \ and \ \ x^2
+$$
+They are different as polynomials but the same as functions. 
+\end{mybox}
+A useful identity for polynomial rings is that 
+$$
+R[x_1,...,x_n]\cong R[y_1,...,y_m][z_{1},...,z_k]
+$$
+for any partitions of $\{x_i\} $into two group $\{y_j\}$  and  $\{z_k\}$. 
+\\
 
-\subsection{Prerequisites}
-\begin{itemize}
-    \item Linear Algebra
-    \item Abstract Algebra (Groups, Rings, Fields)
-    \item Basic Topology
-\end{itemize}
+By partitioning into $\{x_1,...,x_{n-1}\}$ and $\{x_n\} $, a proof by induction quite easily shows that 
+$$
+\text{R is an integral domain} \Rightarrow \text{$R[x_1,...,x_n]$ is an integral domain }
+$$
+This then quickly implies that if $R$ is an integral domain, then 
+$$
+deg(fg)=deg(f)+deg(g)
+$$
+We know that "divide and conquer" is a good strategy. In order to apply this technique, we need to investigate the "atoms" of polynomials, namely their irreducible parts. \\
 
-\section{Basic Definitions}
+\textbf{Irreducibility} should mean  \textbf{"can't be broken into smaller non-trivial pieces".}  But what should be considered trivial and vice versa? We observe that units, namely elements with multiplicative inverses, don't really make something "bigger". 
+\begin{mybox}{An example}
+Consider the ring $\mathbb{Z}$ and the unit $1$, we see that 
+$$
+6=2*3=1*2*3
+$$
+Well, the unit here doesn't really tell us anything new about the structure of $6$. More, generally, let $a$ be a unit s.t. 
+$$
+p=ab
+$$
+$$
+\Rightarrow a^{-1}p=b
+$$
+which says $b$ is merely a relabeling of $p$.  A genuine piece should change the factorization structure in a \textbf{non-reversible} way when we remove it.
+\end{mybox}
 
-\begin{definition}[Affine Variety]
-    An affine variety is the set of common zeros of a collection of polynomials in $\mathbb{A}^n$.
-\end{definition}
+This example implies that units are trivial, and correspondingly, non-units are non-trivial. Hence, an element $p$ being irreducible  should immediately mean that itself is not a unit nor $0$, and 
+$$
+p=ab\Rightarrow \text{a or b is a unit}
+$$
+Namely,  $p$ is irreducible if it is non trivial and cannot be written as a product of two non-trivial parts.\\
 
-\begin{example}
-    The unit circle in $\mathbb{A}^2$ is given by $V(x^2 + y^2 - 1)$.
-\end{example}
+Let's compute the unit of polynomial ring. 
+\begin{mybox}{Units of polynomial ring over a field}
+Let $K$ be a field, then the units of $K[x_1,...,x_n]$ is the set $K/\{0\}$. To see this, take a unit $f$, then inverse exists s.t.
+$$
+f*f^{-1}=1
+$$
+Since $K$ is an integral domain, we apply the degree function on both sides
+$$
+deg(f)+deg(f^{-1})=0
+$$
+But since degree is a non-negative function, we must have 
+$$
+deg(f)=0
+$$
+This means $f$ is a constant polynomial.  Also because $f$ is invertible, $f\neq 0$.  
+\end{mybox}
+This example implies that irreducibility in $K[x_1,...,x_n]$ means \textbf{being non-constant polynomial, and cannot be writte as a product of two non-constant polynomials.}\\
 
-\section{Theorems and Proofs}
+Next, let's see what an irreducible might look like in polynomial ring
 
-\begin{theorem}[Nullstellensatz]
-    Let $I \subset k[x_1, \ldots, x_n]$ be an ideal. Then $I(V(I)) = \sqrt{I}$.
-\end{theorem}
+\begin{mybox}{Linear polynomial}
+A polynomial $f$ with $deg(f)=1$ is necessarily irreducible because if 
+$$
+f=gh
+$$
+we have 
+$$
+deg(f)=deg(g)+deg(h)=1
+$$
+which means at least one of $g$ or $h$ is a unit. 
+\end{mybox}
+Then, applying a strong induction, we can prove that 
+$$
+K[x_1,...,x_n] \text{ is a factoriazation domain}
+$$
+We can actually add \textbf{uniqueness } into this characterization(which is our goal for this section). For this purpose, we investigate ( for integral domain) a special kind of atoms , called the primes. \\
 
-\begin{proof}
-    The proof follows from the correspondence between ideals and algebraic sets.
-\end{proof}
+A prime is a non-trivial piece that cannot hide inside a product. It cannot appear only from the "interaction" of two pieces. We see that \textbf{for a FD} , 
+$$
+\text{irreducibility = prime}\Rightarrow UFD
+$$
+Hence,  our goal is to prove that $\text{irreducibility = prime}$ in $K[x_1,...,x_n]$ . But first, we need to \textbf{develop some structural techniques in compensating for the elementwise techniques}. \\
 
-\section{Examples}
+For this purpose,  we recall that an ideal $I$ is a stable substructure of a ring $R$. Thanks to this stability, imposing the relation $I=0$ upon $R$ through the quotient $R/I$  won't disturb the existing ring structure, which means $R/I$ is a ring itself. \\
 
-\begin{example}
-    Example illustrating the concept with detailed explanation.
-\end{example}
+In addition to the first isomorphism theorem, there are several important structural techniques unique to rings:
+\begin{mybox}{Three techniques}
+\begin{enumerate}
+    \item $p$ is a prime $\Leftrightarrow $ $<p>$ is a prime ideal  (This is a link between elementwise and structural techniques) 
+    \item $I$ is a prime ideal $\Leftrightarrow$ $R/I$ is an integral domain 
+    \item $I$ is a maximal ideal $\Leftrightarrow$ $R/I$ is a field 
+\end{enumerate}    
+\end{mybox}
+We apply these to some calculations:
 
-\section{Exercises}
+\begin{mybox}
+Prove $<x_1-a_1,...,x_n-a_n>$ is a maximal ideal of $K[x_1,...,x_n]$. \\
 
-\begin{exercise}
-    Exercise statement here.
-\end{exercise}
+Consider the evaluation map 
 
-\section{References}
+$$
+ev_a: f(x_1,...,x_n)\rightarrow f(a_1,...,a_b)
+$$
+which is quite obviously surjective. To compute the kernel, note that for each generator $x_i-a_i$ we have 
 
-\begin{itemize}
-    \item Hartshorne, R. \textit{Algebraic Geometry}
-    \item Shafarevich, I.R. \textit{Basic Algebraic Geometry}
-\end{itemize}
+$$
+ev(x_i-a_i)=0
+$$
+which implies 
+$$
+I\subseteq ker(ev_a)
+$$
+The other direction can be solved using a telescoping decomposition 
+$$
+f(x_1,...,x_n)-f(a_1,...,a_n)=\sum_{i=1}^n(f(a_1,...,a_{i-1},x_i,...,x_n)-f(a_1,...,a_{i},x_{i+1},...,x_n))
+$$
+Define the one-variable polynomial
+\[
+G_i(t)\;:=\; f(a_1,\dots,a_{i-1},\,t,\,x_{i+1},\dots,x_n)\ \in\ K[x_{i+1},\dots,x_n][t].
+\]
+Then
+\[
+f(a_1,\dots,a_{i-1},\,x_i,\dots,x_n)\;-\;f(a_1,\dots,a_i,\,x_{i+1},\dots,x_n)
+\;=\; G_i(x_i)\;-\;G_i(a_i).
+\]
+Now apply the factor theorem in the variable \(t\) to get
+\[
+G_i(x_i)\;-\;G_i(a_i)\;=\;(x_i-a_i)\,k_i(x),
+\]
+for some \[(k_i(x)\in K[x_1,\dots,x_n]. \] Denote
+
+$$
+g(x)=(x_i-a_i)k_i(x)
+$$
+We have 
+$$
+f(x_1,...,x_n)-f(a_1,...,a_b)=\sum_{i=1}^n(x-a_i)k_i(x)
+$$
+QED. Then, by the first isomorphism theorem
+    $$
+    \frac{K[x_1,...,x_n]}{<x_1-a_1,...,x_n-a_n>}\cong K
+    $$
+
+But because $K$ is a field, by the third technique, we get the result. 
+
+
+\end{mybox}
+
+
+\begin{mybox}{Three techniques }
+We prove that $<x^2+1>$ is a maximal in $\mathbb{R}[x]$ by noting that 
+$$
+\frac{\mathbb{R}[x]}{<x^2+1>}\cong \mathbb{C}
+$$
+Induced by the surjective map 
+$$
+f(x)\rightarrow f(i)
+$$
+
+Similarly, we can prove  $<x-1>$ is a prime ideal in $\mathbb{Z}[x]$ by noting that 
+
+$$
+\frac{\mathbb{Z}[x]}{<x-1>}\cong \mathbb{Z}
+$$
+
+
+\end{mybox}
+Now we apply them to actually prove something non-trivial! 
+
+\begin{mybox}{A non-trivial application}
+let's apply the techniques to prove the uniqueness part of 
+$$
+PID\Rightarrow UFD
+$$
+Well, this is equivalent to prove irreducibility $=$ prime in $PID$. Let's take an irreducible element $p$ and an ideal $I$ s.t. 
+$$
+(p)\subseteq I\subseteq R
+$$
+Since $R$ is a $PID$, there exists some $a\in R$ s.t.  $I=(a)$. This implies that 
+$$
+a|p
+$$
+Equivalently,  $p=ab$ for some $b\in R$.  Since $p$ is irreducible,
+
+\begin{enumerate}
+    \item If $a$ is a unit, $I=R$
+    \item If $b$ is a unit, $I=(p)$
+\end{enumerate}
+
+In either case, we have $(p)$ is a maximal ideal. Hence, it is also a prime ideal, which means $p$ is a prime. \\
+\end{mybox}
+
+Next, we can apply this proposition to prove $K[x]$ is a $UFD$ by simply showing that it is a $PID$. To prove it is a $PID$, we simply apply the standard minimality argument on Euclidean function(\textbf{need more investigation here)}. \\
+
 
 \end{document}
