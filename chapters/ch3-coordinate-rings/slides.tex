@@ -4,14 +4,32 @@
 \usecolortheme{beaver}
 
 \usepackage{amsmath, amssymb, amsfonts}
-\usepackage{amsthm}
 \usepackage{mathtools}
 \usepackage{tikz}
+\usepackage{tikz-cd}
 \usepackage{hyperref}
 
+\DeclareMathOperator{\Spec}{Spec}
+\DeclareMathOperator{\MaxSpec}{MaxSpec}
+\DeclareMathOperator{\Hom}{Hom}
+\DeclareMathOperator{\im}{im}
+\DeclareMathOperator{\rad}{rad}
+
+\newcommand{\A}{\mathbb{A}}
+\newcommand{\OO}{\mathcal{O}}
+\newcommand{\AffAlgSetK}{\mathrm{AffAlgSet}_K}
+\newcommand{\AffVarK}{\mathrm{AffVar}_K}
+\newcommand{\AlgKfgred}{\mathrm{Alg}_{K,\mathrm{fg},\mathrm{red}}}
+\newcommand{\AlgKfgdom}{\mathrm{Alg}_{K,\mathrm{fg},\mathrm{dom}}}
+\newcommand{\AffSch}{\mathrm{AffSch}}
+\newcommand{\CRing}{\mathrm{CRing}}
+\newcommand{\LRS}{\mathrm{LRS}}
+
+\newtheorem{proposition}[theorem]{Proposition}
+
 \title{Algebraic Geometry}
-\subtitle{Ch.3: Coordinate Rings (week 3)}
-\author{Your Name}
+\subtitle{Ch.3: Coordinate Rings (week 4)}
+\author{Shangren Lu}
 \institute[UniMelb]{University of Melbourne}
 \date{\today}
 
@@ -25,48 +43,539 @@
     \tableofcontents
 \end{frame}
 
-\section{Introduction}
+% ============================================================
+\section{Roadmap}
+% ============================================================
 
-\begin{frame}{Introduction}
+\begin{frame}{The affine dictionary we want}
+    \[
+    X \longmapsto K[X] \longmapsto \Spec(K[X]).
+    \]
     \begin{itemize}
-        \item Point 1
-        \item Point 2
-        \item Point 3
+        \item Start with an affine algebraic set $X \subseteq \A_K^n$.
+        \item Pass to its intrinsic algebra of polynomial functions $K[X]$.
+        \item Recover classical points via maximal ideals.
+        \item Enlarge to all prime ideals to capture irreducible closed subsets.
+        \item Use localization to describe functions on basic opens $D(f)$.
+    \end{itemize}
+    \[
+    \AffAlgSetK^{\mathrm{op}} \simeq \AlgKfgred,
+    \qquad
+    \AffSch^{\mathrm{op}} \simeq \CRing.
+    \]
+\end{frame}
+
+\begin{frame}{Three affine levels}
+    \begin{itemize}
+        \item \textbf{Classical reducible geometry:}
+        \[
+        \AffAlgSetK \leftrightarrow \AlgKfgred.
+        \]
+        \item \textbf{Classical irreducible geometry:}
+        \[
+        \AffVarK \leftrightarrow \AlgKfgdom.
+        \]
+        \item \textbf{Affine schemes over arbitrary rings:}
+        \[
+        \AffSch^{\mathrm{op}} \simeq \CRing.
+        \]
+        \item Only the first two need $K$ algebraically closed; the third is the structural framework behind both.
     \end{itemize}
 \end{frame}
 
-\section{Main Content}
+% ============================================================
+\section{Coordinate Rings}
+% ============================================================
 
-\begin{frame}{Main Concepts}
-    \begin{definition}
-        A definition goes here.
+\begin{frame}{Why functions come first}
+    \begin{itemize}
+        \item An embedding $X \hookrightarrow \A_K^n$ is not canonical.
+        \item A generating set of equations for $X$ is not canonical either.
+        \item The ring of polynomial functions on $X$ is intrinsic.
+        \item Coordinate rings package geometry as algebra: addition, multiplication, and algebraic relations among functions.
+    \end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Polynomial algebras are free coordinate algebras}
+    \begin{proposition}[Free commutative $K$-algebra on $n$ generators]
+        For every commutative $K$-algebra $A$ and every $(a_1,\dots,a_n) \in A^n$, there is a unique $K$-algebra map
+        \[
+        \operatorname{ev}_{(a_1,\dots,a_n)} : K[x_1,\dots,x_n] \longrightarrow A
+        \]
+        with $x_i \mapsto a_i$.
+    \end{proposition}
+    \[
+    \boxed{\Hom_{K\text{-alg}}(K[x_1,\dots,x_n], A) \cong A^n.}
+    \]
+    \vspace{-0.3em}
+    \[
+    \begin{tikzcd}[column sep=large]
+        K \arrow[r, "\iota"] \arrow[dr, "\eta_A"'] & K[x_1,\dots,x_n] \arrow[d, dashed, "\exists!\,\mathrm{ev}_{(a_1,\dots,a_n)}"] \\
+        & A
+    \end{tikzcd}
+    \]
+\end{frame}
+
+\begin{frame}{Polynomial functions and the coordinate ring}
+    \begin{definition}[Polynomial function]
+        A polynomial function on $X \subseteq \A_K^n$ is a function $X(K) \to K$ obtained by restricting some polynomial in $K[x_1,\dots,x_n]$.
     \end{definition}
-
-    \begin{theorem}
-        A theorem goes here.
-    \end{theorem}
-
-    \begin{proof}
-        Proof details here.
-    \end{proof}
-\end{frame}
-
-\section{Examples}
-
-\begin{frame}{Examples}
-    \begin{example}
-        An example illustrating the concept.
-    \end{example}
-\end{frame}
-
-\section{Conclusion}
-
-\begin{frame}{Conclusion}
+    \begin{definition}[Coordinate ring]
+        \[
+        K[X] := \{f|_X : f \in K[x_1,\dots,x_n]\},
+        \]
+        with pointwise ring operations.
+    \end{definition}
     \begin{itemize}
-        \item Summary point 1
-        \item Summary point 2
-        \item Future work
+        \item Different ambient polynomials may define the same function on $X$.
+        \item The ideal of relations is
+        \[
+        I(X) = \{f \in K[x_1,\dots,x_n] : f|_X = 0\}.
+        \]
     \end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Quotient rings impose relations universally}
+    \begin{proposition}[Universal property of the quotient]
+        Let $q : R \to R/I$ be the quotient map. For every ring map
+        $\varphi : R \to A$ with $I \subseteq \ker\varphi$, there is a unique
+        $\overline{\varphi} : R/I \to A$ with $\varphi = \overline{\varphi} \circ q$.
+    \end{proposition}
+    \[
+    \begin{tikzcd}[column sep=large]
+        R \arrow[r, "q"] \arrow[dr, "\varphi"'] & R/I \arrow[d, dashed, "\exists!\,\overline\varphi"] \\
+        & A
+    \end{tikzcd}
+    \]
+    \begin{itemize}
+        \item $R/I$ is initial among $R$-algebras on which every element of $I$ acts by zero.
+        \item Equivalently: every ring map annihilating $I$ factors uniquely through $R/I$.
+    \end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Coordinate rings as universal quotients}
+    \begin{corollary}[Coordinate ring as universal quotient]
+        For $X \subseteq \A_K^n$,
+        \[
+        \boxed{K[X] \cong K[x_1,\dots,x_n]/I(X).}
+        \]
+    \end{corollary}
+    \[
+    \begin{tikzcd}[column sep=large]
+        K[x_1,\dots,x_n] \arrow[r, "\rho"] \arrow[d, "q_X"'] & K[X] \\
+        K[x_1,\dots,x_n]/I(X) \arrow[ur, "\sim"'] &
+    \end{tikzcd}
+    \]
+    \begin{itemize}
+        \item Quotienting by $I(X)$ identifies two polynomials precisely when they induce the same function on $X$.
+        \item Therefore $K[X]$ is finitely generated and reduced in the classical setting.
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{Running example: the parabola}
+    Let
+    \[
+    X = V(y - x^2) \subseteq \A_K^2.
+    \]
+    Then
+    \[
+    K[X] \cong K[x,y]/(y-x^2) \cong K[x].
+    \]
+    \begin{itemize}
+        \item Inside the quotient, $y$ becomes $x^2$.
+        \item So the parabola has the same coordinate ring as the affine line.
+        \item Geometrically: the chosen equations may differ, but the coordinate ring captures the intrinsic affine geometry.
+    \end{itemize}
+    \[
+    \boxed{K[V(y-x^2)] \cong K[x].}
+    \]
+\end{frame}
+
+% ============================================================
+\section{Points and Maximal Ideals}
+% ============================================================
+
+\begin{frame}[fragile]{Classical points as evaluation maps}
+    For each $x \in X(K)$, evaluation gives a $K$-algebra map
+    \[
+    \mathrm{ev}_x : K[X] \longrightarrow K,
+    \qquad f \longmapsto f(x).
+    \]
+    Its kernel
+    \[
+    \mathfrak m_x := \ker(\mathrm{ev}_x)
+    \]
+    is a maximal ideal because constants lie in $K[X]$, so the map is surjective and
+    \[
+    K[X]/\mathfrak m_x \cong K.
+    \]
+    \vspace{-0.3em}
+    \[
+    \begin{tikzcd}[column sep=large]
+        K[X] \arrow[r, "\mathrm{ev}_x"] \arrow[d, "q_x"'] & K \\
+        K[X]/\mathfrak m_x \arrow[ur, "\sim"'] &
+    \end{tikzcd}
+    \]
+\end{frame}
+
+\begin{frame}{Nullstellensatz gives the classical dictionary}
+    \begin{theorem}[Hilbert's Nullstellensatz]
+        If $K$ is algebraically closed, then:
+        \begin{enumerate}
+            \item $I(V(I)) = \rad(I)$ for every ideal $I \subseteq K[x_1,\dots,x_n]$;
+            \item maximal ideals of $K[x_1,\dots,x_n]$ are exactly
+            \[
+            (x_1-a_1,\dots,x_n-a_n), \qquad (a_1,\dots,a_n) \in K^n.
+            \]
+        \end{enumerate}
+    \end{theorem}
+    Hence
+    \[
+    \boxed{X(K) \cong \Hom_{K\text{-alg}}(K[X], K) \cong \MaxSpec(K[X]).}
+    \]
+\end{frame}
+
+\begin{frame}{Example: the affine line inside its spectrum}
+    Take $R = K[x]$.
+    \begin{itemize}
+        \item Closed points are the maximal ideals $(x-a)$ for $a \in K$.
+        \item Thus
+        \[
+        \MaxSpec(K[x]) \cong \A_K^1(K).
+        \]
+        \item But $\Spec(K[x])$ has one more prime ideal: $(0)$.
+        \item Its closure is the whole space:
+        \[
+        \overline{\{(0)\}} = \Spec(K[x]).
+        \]
+    \end{itemize}
+    This is our first generic point.
+\end{frame}
+
+% ============================================================
+\section{Why Spectra}
+% ============================================================
+
+\begin{frame}{Why maximal ideals are not enough}
+    \begin{itemize}
+        \item $\MaxSpec(R)$ recovers classical closed points.
+        \item But irreducible closed subsets usually do not have points in $\MaxSpec$ representing them.
+        \item Passing to
+        \[
+        \Spec(R) := \{\mathfrak p \subseteq R : \mathfrak p \text{ prime}\}
+        \]
+        adds the generic points needed to encode irreducible geometry.
+    \end{itemize}
+    \[
+    \boxed{X(K)\ \cong\ \MaxSpec(K[X])\ \subseteq\ \Spec(K[X]).}
+    \]
+\end{frame}
+
+\begin{frame}{Zariski topology on the spectrum}
+    For an ideal $I \subseteq R$, define
+    \[
+    V(I) := \{\mathfrak p \in \Spec(R) : I \subseteq \mathfrak p\}.
+    \]
+    For $f \in R$, define the standard open
+    \[
+    D(f) := \Spec(R) \setminus V((f)) = \{\mathfrak p : f \notin \mathfrak p\}.
+    \]
+    \begin{itemize}
+        \item $D(1) = \Spec(R)$, \quad $D(0) = \varnothing$.
+        \item $D(fg) = D(f) \cap D(g)$, since $fg \notin \mathfrak p \iff f \notin \mathfrak p$ and $g \notin \mathfrak p$ \emph{(primality)}.
+    \end{itemize}
+    So the sets $D(f)$ form a basis for the Zariski topology.
+\end{frame}
+
+\begin{frame}{Prime ideals correspond to irreducible closed sets}
+    For $\mathfrak p \in \Spec(R)$,
+    \[
+    \boxed{\overline{\{\mathfrak p\}} = V(\mathfrak p).}
+    \]
+    Therefore:
+    \begin{itemize}
+        \item $\mathfrak p$ is closed iff $\mathfrak p$ is maximal;
+        \item prime ideals are in bijection with irreducible closed subsets;
+        \item every irreducible closed subset has a unique generic point.
+    \end{itemize}
+    \[
+    \boxed{\{\text{prime ideals of } R\} \longleftrightarrow \{\text{irreducible closed subsets of } \Spec(R)\}.}
+    \]
+\end{frame}
+
+\begin{frame}{Example: generic point of the parabola}
+    In $R = K[x,y]$, let
+    \[
+    \mathfrak p = (y-x^2).
+    \]
+    Since
+    \[
+    R/\mathfrak p \cong K[x]
+    \]
+    is a domain, $\mathfrak p$ is prime. Hence
+    \[
+    \overline{\{\mathfrak p\}} = V(\mathfrak p).
+    \]
+    \begin{itemize}
+        \item $\mathfrak p$ is the generic point of the parabola.
+        \item Every closed point $(x-a, y-a^2)$ is a specialization:
+        \[
+        \mathfrak p \subseteq (x-a,\, y-a^2).
+        \]
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{Affine plane: three levels of points}
+    In $\Spec(K[x,y])$:
+    \begin{itemize}
+        \item \textbf{Closed points:} maximal ideals $(x-a, y-b)$, i.e.\ classical points $(a,b) \in K^2$.
+        \item \textbf{Curve generic points:} e.g.\ $(y-3x^2)$ is the generic point of $V(y-3x^2)$, with
+        \[
+        \overline{\{(y-3x^2)\}} = V(y-3x^2).
+        \]
+        \item \textbf{Ambient generic point:} $(0)$ with
+        \[
+        \overline{\{(0)\}} = \Spec(K[x,y]).
+        \]
+    \end{itemize}
+    \[
+    \boxed{\text{classical points } \leftrightarrow \text{ maximal ideals } \subsetneq \text{ all prime ideals}.}
+    \]
+\end{frame}
+
+% ============================================================
+\section{Localization and Basic Opens}
+% ============================================================
+
+\begin{frame}[fragile]{Localization is universal inversion}
+    Let $S \subseteq R$ be multiplicative. The localization map
+    \[
+    i_S : R \longrightarrow S^{-1}R
+    \]
+    is characterized by:
+    \begin{itemize}
+        \item every $s \in S$ becomes invertible in $S^{-1}R$;
+        \item for any ring map $\varphi : R \to A$ with $\varphi(S) \subseteq A^\times$, there is a unique factorization:
+    \end{itemize}
+    \[
+    \begin{tikzcd}[column sep=large]
+        R \arrow[r, "i_f"] \arrow[dr, "\varphi"'] & R_f \arrow[d, dashed, "\exists!\,\widetilde\varphi"] \\
+        & A
+    \end{tikzcd}
+    \]
+    In particular, $R_f$ is the universal $R$-algebra in which $f$ becomes invertible.
+\end{frame}
+
+\begin{frame}{Localization matches basic opens}
+    For $f \in R$, the localization map $i_f : R \to R_f$ induces a homeomorphism
+    \[
+    \Spec(R_f) \xrightarrow{\sim} D(f),
+    \qquad \mathfrak q \longmapsto i_f^{-1}(\mathfrak q).
+    \]
+    \begin{itemize}
+        \item Prime ideals of $R_f$ correspond to prime ideals of $R$ disjoint from $\{1,f,f^2,\dots\}$.
+        \item Equivalently, they correspond exactly to primes not containing $f$.
+    \end{itemize}
+    \[
+    \boxed{\Spec(R_f) \cong D(f).}
+    \]
+\end{frame}
+
+\begin{frame}{The structure sheaf on an affine spectrum}
+    For $X = \Spec(R)$, define the structure sheaf on basic opens by
+    \[
+    \OO_X(D(f)) := R_f.
+    \]
+    So regular functions on $D(f)$ are exactly fractions
+    \[
+    \frac{a}{f^n}, \qquad a \in R,\ n \ge 0.
+    \]
+    \begin{block}{Key slogan}
+        Localization is the algebra behind restricting functions to the open set where $f$ does not vanish.
+    \end{block}
+\end{frame}
+
+\begin{frame}{Example: the punctured affine line}
+    Let $R = K[x]$ and $X = \Spec(K[x])$.
+    \[
+    D(x) = \{\mathfrak p \in \Spec(K[x]) : x \notin \mathfrak p\}.
+    \]
+    Then
+    \[
+    \Gamma(D(x), \OO_X) = K[x]_x = K[x, x^{-1}].
+    \]
+    \begin{itemize}
+        \item $x^{-1}$ is regular on $D(x)$;
+        \item but $x^{-1}$ is not global on all of $X$;
+        \item indeed $\Gamma(X, \OO_X) = K[x]$.
+    \end{itemize}
+\end{frame}
+
+% ============================================================
+\section{From Algebra to Geometry}
+% ============================================================
+
+\begin{frame}{The classical affine dictionary}
+    \begin{theorem}[Classical affine dictionary]
+        Over algebraically closed $K$, there is an anti-equivalence of categories
+        \[
+        \boxed{\AffAlgSetK^{\mathrm{op}} \simeq \AlgKfgred.}
+        \]
+        Restricting to irreducible objects refines to
+        \[
+        \AffVarK^{\mathrm{op}} \simeq \AlgKfgdom.
+        \]
+    \end{theorem}
+    \begin{itemize}
+        \item The geometric direction sends $X \mapsto K[X]$.
+        \item The algebraic direction sends $A \mapsto \MaxSpec(A)$.
+        \item Arrow reversal (anti-equivalence) comes from pullback of functions.
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{Example: recovering equations from a ring}
+    Let
+    \[
+    A := K[u^2, uv, v^2] \subseteq K[u,v].
+    \]
+    Define a surjective map
+    \[
+    \psi : K[x,y,z] \twoheadrightarrow A,
+    \qquad x \mapsto u^2,\ y \mapsto uv,\ z \mapsto v^2.
+    \]
+    \begin{itemize}
+        \item The relation $xz - y^2 = 0$ holds in $A$, and in fact
+        \[
+        \ker\psi = (xz - y^2).
+        \]
+        \item So $A \cong K[x,y,z]/(xz-y^2)$, and the associated affine algebraic set is
+        \[
+        V(xz - y^2) \subseteq \A_K^3
+        \]
+        (a quadratic cone).
+    \end{itemize}
+\end{frame}
+
+% ============================================================
+\section{Morphisms and Affine Schemes}
+% ============================================================
+
+\begin{frame}[fragile]{Morphisms reverse arrows on functions}
+    A morphism $f : X \to Y$ induces pullback of functions
+    \[
+    f^* : K[Y] \longrightarrow K[X],
+    \qquad g \longmapsto g \circ f.
+    \]
+    \[
+    \begin{tikzcd}[column sep=large, row sep=large]
+        K[Y] \arrow[r, "f^*"] \arrow[d, "\mathrm{ev}_{f(x)}"'] & K[X] \arrow[d, "\mathrm{ev}_x"] \\
+        K \arrow[r, equal] & K
+    \end{tikzcd}
+    \]
+    \begin{itemize}
+        \item The square commutes: evaluating $f^*(g)$ at $x$ equals evaluating $g$ at $f(x)$.
+        \item This arrow reversal is why the coordinate-ring construction is contravariant.
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{Ring maps induce maps of spectra}
+    \begin{proposition}
+        A ring homomorphism $\varphi : R \to S$ induces a continuous map
+        \[
+        \Spec(S) \longrightarrow \Spec(R),
+        \qquad \mathfrak q \longmapsto \varphi^{-1}(\mathfrak q).
+        \]
+    \end{proposition}
+    \begin{itemize}
+        \item Preimage of a prime ideal under a ring map is always prime.
+        \item Continuity: $\varphi^{-1}$ sends $V(I) \subseteq \Spec(R)$ to $V(I \cdot S) \subseteq \Spec(S)$.
+        \item This is the geometric shadow of the algebraic map $\varphi$.
+    \end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Universal property of $\Spec$}
+    \begin{theorem}[Universal property of affine target]
+        For every locally ringed space $X$ and commutative ring $R$, there is a natural bijection
+        \[
+        \boxed{\Hom_{\LRS}(X,\Spec(R))\cong \Hom_{\CRing}(R,\Gamma(X,\OO_X)).}
+        \]
+    \end{theorem}
+    \[
+    \begin{tikzcd}[column sep=large]
+        R \arrow[r, "\alpha"] \arrow[d, "\cong"'] & \Gamma(X,\OO_X) \\
+        \Gamma(\Spec(R),\OO_{\Spec(R)}) \arrow[ur, "\Gamma(u_\alpha)"'] &
+    \end{tikzcd}
+    \]
+    \begin{itemize}
+        \item A morphism into an affine scheme is determined by a ring map on global sections.
+        \item $\Spec(R)$ \emph{represents} the functor $X \mapsto \Hom_{\CRing}(R, \Gamma(X,\OO_X))$.
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{Affine Hom-bijections}
+    \begin{theorem}[Classical affine Hom-bijection]
+        For affine algebraic sets $X, Y$ over algebraically closed $K$,
+        \[
+        \boxed{\Hom_{\AffAlgSetK}(X, Y) \cong \Hom_{K\text{-alg}}(K[Y], K[X]).}
+        \]
+    \end{theorem}
+    \begin{theorem}[Affine schemes Hom-bijection]
+        For commutative rings $R, S$,
+        \[
+        \boxed{\Hom_{\AffSch}(\Spec(S), \Spec(R)) \cong \Hom_{\CRing}(R, S).}
+        \]
+    \end{theorem}
+    \begin{itemize}
+        \item The scheme version uses $\Gamma(\Spec(S),\OO_{\Spec(S)}) \cong S$.
+        \item Geometry and algebra determine each other; the ring map always points in the opposite direction.
+    \end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Products and fibre products}
+    \begin{proposition}
+        Affine schemes admit finite limits. In particular,
+        \[
+        \boxed{\Spec(A)\times_{\Spec(R)}\Spec(B)\cong \Spec(A\otimes_R B).}
+        \]
+    \end{proposition}
+    \[
+    \begin{tikzcd}[column sep=large, row sep=large]
+        \Spec(A\otimes_R B) \arrow[r, "\mathrm{pr}_B"] \arrow[d, "\mathrm{pr}_A"'] & \Spec(B) \arrow[d] \\
+        \Spec(A) \arrow[r] & \Spec(R)
+    \end{tikzcd}
+    \]
+    \begin{itemize}
+        \item Tensor products encode affine base change on spectra.
+        \item \textbf{Functor of points:} for $\Spec(R)$,
+        \[
+        h_{\Spec(R)}(A) := \Hom_{\AffSch}(\Spec(A),\Spec(R)) \cong \Hom_{\CRing}(R,A).
+        \]
+        \item The ring $R$ is recovered from its functor of points.
+    \end{itemize}
+\end{frame}
+
+% ============================================================
+% Summary (unsectioned)
+% ============================================================
+
+\begin{frame}{The big picture}
+    \[
+    X \longmapsto K[X] \longmapsto \Spec(K[X]).
+    \]
+    \begin{enumerate}
+        \item \textbf{Coordinate rings} encode polynomial functions intrinsically.
+        \item \textbf{Maximal ideals} recover classical points via evaluation.
+        \item \textbf{Prime ideals} add generic points for irreducible closed subsets.
+        \item \textbf{Localization} produces functions on $D(f)$; $\Spec(R_f) \cong D(f)$.
+        \item \textbf{Contravariance} reverses arrows: morphisms of spaces $\longleftrightarrow$ ring maps in the opposite direction.
+    \end{enumerate}
+    \vfill
+    The organizing principle is \textbf{functorial}:
+    \[
+    \boxed{\AffAlgSetK^{\mathrm{op}} \simeq \AlgKfgred,
+    \qquad
+    \AffSch^{\mathrm{op}} \simeq \CRing.}
+    \]
 \end{frame}
 
 \end{document}
